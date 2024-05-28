@@ -1,9 +1,10 @@
-# Northcoders News API
+# Instructions 
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+Create 2 files one called .env.test and one called .env.development
 
+Inside .env.test put PGDATABASE=nc_news_test
+Inside .env.development put PGDATABASE=nc_news
 
+Then add .env.test and .env.development to the .gitignore file so you protect the information from others also
 
---- 
-
-This portfolio project was created as part of a Digital Skills Bootcamp in Software Engineering provided by [Northcoders](https://northcoders.com/)
+Doing as stated above will allow you to connect to the two databases locally
