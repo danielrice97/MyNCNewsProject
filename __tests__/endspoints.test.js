@@ -103,5 +103,27 @@ describe('Article Tests', () => {
         }) 
     })
 
+    test('Status 200: Gets all articles',()=>{
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then((data) => {
+            const articles = data.body
+
+            articles.forEach((article) => {
+                expect(article).toMatchObject({
+                    article_id: expect.any(Number),
+                    title : expect.any(String),
+                    topic : expect.any(String),
+                    author : expect.any(String),
+                    created_at : expect.any(String),
+                    votes : expect.any(Number),
+                    article_img_url: expect.any(String)
+                })
+            })
+
+        }) 
+    })
+
 })
 

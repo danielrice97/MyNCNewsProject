@@ -11,3 +11,12 @@ exports.getArticleByID= async (req,res,next)=>{
         next({status: 400, msg: "Bad Request"})
     })
 }
+
+const fetchAllArticles = require('../models/fetchAllArticles.model.js')
+
+exports.getAllArticles = (req, res, next) => {
+    fetchAllArticles().then((articles) => {
+        res.status(200).send(articles)
+
+    })
+}
