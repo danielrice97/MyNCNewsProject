@@ -220,7 +220,7 @@ describe('For adding a comment to a specified article', () => {
     
 })
 
-describe.only('Patches the article by updating the number of votes', () => {
+describe('Patches the article by updating the number of votes', () => {
     test('Status 201: succesfully patches the article when a valid article is chosen and updates the number of votes when given amount to update them',()=>{
         return request(app)
         .patch('/api/articles/3')
