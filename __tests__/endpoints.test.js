@@ -1,7 +1,9 @@
 const request = require('supertest')
 const app = require('../app.js')
-const { commentData } = require('../db/data/development-data/index.js')
-const comments = require('../db/data/development-data/comments.js')
+const db = require('../db/data/test-data/index.js')
+const seed = require('../db/seeds/seed.js')
+
+beforeEach(()=> seed(db))
 
 describe('Topic Tests', () => {
     test('Status 200: GETs all Topics',()=>{
@@ -227,7 +229,15 @@ describe('Patches the article by updating the number of votes', () => {
         .send({ inc_votes: 50 })
         .expect(201)
         .then(({body}) => {
-
+            expect(body).toMatchObject({
+                article_id: 3,
+                title: 'Eight pug gifs that remind me of mitch',
+                topic: 'mitch',
+                author: 'icellusedkars',
+                body: 'some gifs',
+                created_at: '2020-11-03T09:12:00.000Z',
+                votes: 50,
+                article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'})
         });
     })
 
@@ -244,4 +254,30 @@ describe('Patches the article by updating the number of votes', () => {
 
 })
 
-    })
+})
+describe('Deletes a comment when given a comment_id', () => {
+    test('Status 204: succesfully deleted the comment when given a valid comment ID',()=>{
+        return request(app)
+        .delete('/api/comments/4')
+        .expect(204)
+    })  
+
+    test('Status 404: cannot delete comment when comment ID does not match any of our comments',()=>{
+        return request(app)
+        .delete('/api/comments/999')
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toMatchObject({ status : 404, msg: "Not Found"})
+        });
+    })  
+
+
+    test('Status 400: cannot delete comment when given incorrect data type for the comment id',()=>{
+        return request(app)
+        .delete('/api/comments/hello')
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toMatchObject({ status : 400, msg: "Bad Request"})
+        });
+    })  
+})

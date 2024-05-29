@@ -60,5 +60,32 @@
         "created_at": "2020-06-20T07:24:00.000Z"
       }
     ]
+  },
+  "POST /api/articles/:article_id/comments" : {
+    "description": "gives us the newly posted comment back", 
+    "queries": [],
+    "exampleResponse": { "comment_id": 10,
+                          "body": "I am northcoder student",
+                          "author": "butter_bridge",
+                          "votes": 50,
+                          "created_at": "1604113380000" 
+                        }
+  },
+  "PATCH /api/articles/:article_id" : {
+    "description": "gives the article we asked with the votes increased by the amount we asked for", 
+    "queries": [],
+    "exampleResponse": { 
+      "article_id": 3,
+      "title": "Eight pug gifs that remind me of mitch",
+      "topic": "mitch",
+      "author": "icellusedkars",
+      "body": "some gifs",
+      "created_at": "2020-11-03T09:12:00.000Z",
+      "votes": 50,
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+    }
+  }, 
+  "DELETE /api/comments/:comment_id" : {
+    "description": "deletes the comment, doesnt give us anything backl"
   }
 }
