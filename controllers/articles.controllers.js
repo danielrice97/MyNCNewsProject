@@ -59,3 +59,23 @@ exports.postCommentForArticle = async (req, res, next) => {
 
 
 }
+
+const updateArticleVotes = require('../models/updateArticleVotes.model.js')
+
+exports.patchArticle = async (req, res, next) => {
+    const inc_votes = req.body.inc_votes
+    const {article_id} = req.params
+    
+    const article = await fetchArticleById(article_id)
+
+    if (!article) {
+        return next({ status: 404, msg: "Not found" });
+    }
+
+    const current_votes = article.votes
+    const new_votes = current_votes + inc_votes
+
+    updateArticleVotes(new_votes, article_id).then((updatedArticle) => {
+        res.status(201).send(updatedArticle)
+    })
+}

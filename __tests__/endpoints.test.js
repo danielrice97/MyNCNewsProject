@@ -215,9 +215,33 @@ describe('For adding a comment to a specified article', () => {
             expect(body).toMatchObject({ status: 401, msg: 'Unauthorized' })
         });
     })
+
+
+    
 })
 
+describe('Patches the article by updating the number of votes', () => {
+    test('Status 201: succesfully patches the article when a valid article is chosen and updates the number of votes when given amount to update them',()=>{
+        return request(app)
+        .patch('/api/articles/3')
+        .send({ inc_votes: 50 })
+        .expect(201)
+        .then(({body}) => {
+
+        });
+    })
+
+    test('Status 404: tries to patch a non existant article and returns an error and status code',()=>{
+        return request(app)
+        .patch('/api/articles/999')
+        .send({ inc_votes: 50 })
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toMatchObject({ status: 404, msg: 'Not found' })
+        })
+    })
   
 
 })
 
+    })
