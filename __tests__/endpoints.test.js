@@ -172,5 +172,52 @@ describe('For retrieving comments for a specified article', () => {
 
 })
 
+describe('For adding a comment to a specified article', () => {
+    test('Status 201: inserts a new comment for the specified article and responds with the posted comment',()=>{
+        return request(app)
+        .post('/api/articles/3/comments')
+        .send({ username: "butter_bridge",
+                body: "I am northcoder student"
+        })
+        .expect(201)
+        .then(({body}) => {
+            const comment = body[0]
+            expect(comment).toMatchObject({
+                comment_id: expect.any(Number),
+                body: 'I am northcoder student',
+                article_id: 3,
+                author: "butter_bridge",
+                votes: expect.any(Number),
+                created_at: expect.any(String)
+            })
+        });
+    })
+    test('Status 404: cannot post and displays 404 error message because no such article to post the comment to',()=>{
+        return request(app)
+        .post('/api/articles/999/comments')
+        .send({ username: "daniel",
+                body: "I am northcoder student"
+        })
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toMatchObject({ status: 404, msg: 'Not found' })
+        });
+    })
+
+    test('Status 401: unauthorised user tried to add a comment to an article',()=>{
+        return request(app)
+        .post('/api/articles/3/comments')
+        .send({ username: "daniel",
+                body: "I am northcoder student"
+        })
+        .expect(401)
+        .then(({body}) => {
+            expect(body).toMatchObject({ status: 401, msg: 'Unauthorized' })
+        });
+    })
+})
+
+  
+
 })
 

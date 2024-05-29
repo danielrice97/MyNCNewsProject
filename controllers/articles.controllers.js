@@ -7,8 +7,8 @@ exports.getArticleByID= async (req,res,next)=>{
     } else {
     res.status(404).send({ status: 404,  msg: "Not found"})
     }
-    }).catch(() => {
-        next({status: 400, msg: "Bad Request"})
+    }).catch((err) => {
+        next(err)
     })
 }
 
@@ -25,18 +25,37 @@ const fetchCommentsForArticle = require('../models/fetchCommentsForArticle.model
 
 exports.getCommentsForArticle = async (req, res, next) => {
     const articleID  = Object.values(req.params).toString()
-    
+
    fetchArticleById(articleID).then((article) => {
         if (!article) {
             return next({ status: 404, msg: "Not found" });
           }
           return fetchCommentsForArticle(articleID)
-    }).catch(() => {
-        return next({status: 400, msg: "Bad Request"})
     }).then((comments) => {
         res.status(200).send(comments)
-    }).catch(() => {
-        return next({status: 400, msg: "Bad Request"})
+    }).catch((err) => {
+        return next(err)
     })
     
+}
+
+const insertCommentForArticle = require('../models/insertCommentForArticle.model.js')
+
+exports.postCommentForArticle = async (req, res, next) => {
+    const articleID  = Object.values(req.params).toString()
+    const comment = req.body
+    
+    const article = await fetchArticleById(articleID)
+    
+    if (!article) {
+        return next({ status: 404, msg: "Not found" });
+    }
+
+    insertCommentForArticle(articleID, comment).then((comment) => {
+        res.status(201).send(comment)
+    }).catch((err) => {
+        next(err)
+    })
+
+
 }
