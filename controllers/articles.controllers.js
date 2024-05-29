@@ -20,3 +20,23 @@ exports.getAllArticles = (req, res, next) => {
 
     })
 }
+
+const fetchCommentsForArticle = require('../models/fetchCommentsForArticle.model.js')
+
+exports.getCommentsForArticle = async (req, res, next) => {
+    const articleID  = Object.values(req.params).toString()
+    
+   fetchArticleById(articleID).then((article) => {
+        if (!article) {
+            return next({ status: 404, msg: "Not found" });
+          }
+          return fetchCommentsForArticle(articleID)
+    }).catch(() => {
+        return next({status: 400, msg: "Bad Request"})
+    }).then((comments) => {
+        res.status(200).send(comments)
+    }).catch(() => {
+        return next({status: 400, msg: "Bad Request"})
+    })
+    
+}
