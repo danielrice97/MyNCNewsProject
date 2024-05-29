@@ -5,7 +5,7 @@ function fetchArticleById(articleID) {
             return rows[0]
     
     }).catch(() => {
-           return Promise.reject({err: 400, msg: "Bad Request"})
+           return Promise.reject({ status : 400, msg: "Bad Request"})
     })
 }
 module.exports = fetchArticleById
