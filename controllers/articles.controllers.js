@@ -14,21 +14,26 @@ exports.getArticleByID= async (req,res,next)=>{
 
 const fetchAllArticles = require('../models/fetchAllArticles.model.js')
 
-exports.getAllArticles = (req, res, next) => {
-    const queryvalue = Object.values(req.query).toString()
-    
-    const query = Object.keys(req.query).toString()
-    
-    if (query === "topic"  || !query) {
+exports.getAllArticles = (req, res, next) => {    
+    const querykeys = Object.keys(req.query)
+    const validKeys = ['topic', 'sort_by', 'order'];
+    const queryobject = {};
 
-    fetchAllArticles(queryvalue).then((articles) => {
-        res.status(200).send(articles)
-    }).catch((err)=> {
-        next(err)
-    })
-    } else {
-        next({ status: 400, msg: "Bad Request"})
+    for (let key of querykeys) {
+        if (validKeys.includes(key)) {
+            queryobject[key] = req.query[key];
+        } else {
+            return next({ status: 400, msg: "Bad Request" });
+        }
     }
+
+    fetchAllArticles(queryobject)
+        .then((articles) => {
+            res.status(200).send(articles);
+        })
+        .catch((err) => {
+            next(err);
+        });
 }
 
 const fetchCommentsForArticle = require('../models/fetchCommentsForArticle.model.js')
