@@ -281,3 +281,23 @@ describe('Deletes a comment when given a comment_id', () => {
         });
     })  
 })
+
+
+describe('User Tests', () => {
+    describe('Gets all the Users', () => {
+    test('Status 200: Gets all the Users ',()=>{
+        return request(app)
+        .get('/api/users')
+        .expect(200).then(({body}) => {
+            const users = body
+            users.forEach((user) => {
+                expect(user).toMatchObject({
+                    username: expect.any(String),
+                    name: expect.any(String),
+                    avatar_url: expect.any(String)
+                })
+            })
+        })
+    })  
+    })
+})

@@ -87,5 +87,10 @@
   }, 
   "DELETE /api/comments/:comment_id" : {
     "description": "deletes the comment, doesnt give us anything backl"
+  },
+  "GET /api/users" : {
+    "description": "gives an array of all the users",
+    "queries": [],
+    "exampleResponse": []
   }
 }
