@@ -222,6 +222,8 @@ describe('For adding a comment to a specified article', () => {
     
 })
 
+
+
 describe('Patches the article by updating the number of votes', () => {
     test('Status 201: succesfully patches the article when a valid article is chosen and updates the number of votes when given amount to update them',()=>{
         return request(app)
@@ -251,6 +253,49 @@ describe('Patches the article by updating the number of votes', () => {
         })
     })
   
+
+})
+
+describe('allows user to filter the articles by a topic query', () => {
+    test('Status 200: returns all the articles which have a topic of cats',()=>{
+        return request(app)
+        .get('/api/articles?topic=cats')
+        .expect(200)
+        .then(({body}) => {
+            expect(body).toEqual( [
+                {
+                  article_id: 5,
+                  title: 'UNCOVERED: catspiracy to bring down democracy',
+                  topic: 'cats',
+                  author: 'rogersop',
+                  created_at: '2020-08-03T13:14:00.000Z',
+                  votes: 0,
+                  article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+                }
+              ])
+        })
+        
+    })
+
+    test('Status 404: returns 404 when no such topic in the articles',()=>{
+        return request(app)
+        .get('/api/articles?topic=elephants')
+        .expect(404)
+        .then(({body}) => {
+           expect(body).toMatchObject({ status: 404, msg: 'Not Found' })
+        })
+        
+    })
+    
+    test('Status 400: returns 400 when an invalid query is used',()=>{
+        return request(app)
+        .get('/api/articles?houses=elephants')
+        .expect(400)
+        .then(({body}) => {
+           expect(body).toMatchObject({ status: 400, msg: 'Bad Request' })
+        })
+        
+    })
 
 })
 

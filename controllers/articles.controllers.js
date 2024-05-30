@@ -15,10 +15,20 @@ exports.getArticleByID= async (req,res,next)=>{
 const fetchAllArticles = require('../models/fetchAllArticles.model.js')
 
 exports.getAllArticles = (req, res, next) => {
-    fetchAllArticles().then((articles) => {
-        res.status(200).send(articles)
+    const queryvalue = Object.values(req.query).toString()
+    
+    const query = Object.keys(req.query).toString()
+    
+    if (query === "topic"  || !query) {
 
+    fetchAllArticles(queryvalue).then((articles) => {
+        res.status(200).send(articles)
+    }).catch((err)=> {
+        next(err)
     })
+    } else {
+        next({ status: 400, msg: "Bad Request"})
+    }
 }
 
 const fetchCommentsForArticle = require('../models/fetchCommentsForArticle.model.js')
