@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const {getAllTopicsData}= require('./controllers/topics.controller.js')
 const {getAllEndPointsInfo}= require('./controllers/endpoints.controller.js')
-const {getArticleByID, getAllArticles, getCommentsForArticle, postCommentForArticle, patchArticle}= require('./controllers/articles.controllers.js')
+const {getArticleByID, getAllArticles, getCommentsForArticle, postCommentForArticle, patchArticle, getsArticleWithCommentCount}= require('./controllers/articles.controllers.js')
 const {deleteComment}= require('./controllers/comments.controller.js')
 const {getUsers} = require('./controllers/users.controller.js')
 app.use(express.json())
@@ -16,6 +16,7 @@ app.post('/api/articles/:article_id/comments', postCommentForArticle)
 app.patch('/api/articles/:article_id', patchArticle)
 app.delete('/api/comments/:comment_id', deleteComment)
 app.get('/api/users', getUsers)
+app.get('/api/articles/:article_id/comment_count', getsArticleWithCommentCount)
 
 
 app.use((err, req, res, next) => {

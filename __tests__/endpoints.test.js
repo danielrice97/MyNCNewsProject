@@ -108,6 +108,53 @@ describe('Endpoint Tests', () => {
         }) 
     })
     })
+
+    describe('gets the article along with a comment_count display number of comments article had', () => {
+        test('Status 200: sucesfully returns specified article along with a comment_count displaying the number of comments the article has',()=>{
+            return request(app)
+            .get('/api/articles/3/comment_count')
+            .expect(200)
+            .then(({body}) => {
+                const article = body
+                expect(article).toMatchObject( {
+                    article_id: 3,
+                    title: 'Eight pug gifs that remind me of mitch',
+                    topic: 'mitch',
+                    author: 'icellusedkars',
+                    body: 'some gifs',
+                    created_at: "2020-11-03T09:12:00.000Z",
+                    votes: expect.any(Number),
+                    article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+                    comment_count: 2
+                  })
+            })
+        })
+
+        test('Status 404: Gives an error message and a status 404 for non existant article',()=>{
+            return request(app)
+            .get('/api/articles/999/comment_count')
+            .expect(404)
+            .then((data) => {
+                const err = data.body
+                expect(err).toMatchObject({ status: 404, msg: 'Not found' })
+            })
+        })
+    
+        test('Status 400: Gives an error message for entering a parametric endpoint of wrong data type when trying to retrieve a specific article ',()=>{
+            return request(app)
+            .get('/api/articles/hello/comment_count')
+            .expect(400)
+            .then((data) => {
+                const err = data.body
+                expect(err).toMatchObject({ status: 400, msg: 'Bad Request' })
+            }) 
+        })
+
+        
+
+    
+    })
+
     describe('Get all articles', () => {
 
     test('Status 200: Gets all articles',()=>{
@@ -299,7 +346,6 @@ describe('allows user to filter the articles by a topic query', () => {
 
 })
 
-})
 describe('Deletes a comment when given a comment_id', () => {
     test('Status 204: succesfully deleted the comment when given a valid comment ID',()=>{
         return request(app)
@@ -326,6 +372,7 @@ describe('Deletes a comment when given a comment_id', () => {
         });
     })  
 })
+    })
 
 
 describe('User Tests', () => {

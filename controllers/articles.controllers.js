@@ -89,3 +89,21 @@ exports.patchArticle = async (req, res, next) => {
         res.status(201).send(updatedArticle)
     })
 }
+
+exports.getsArticleWithCommentCount = async (req,res,next)=>{
+    const articleID = Object.values(req.params).toString()
+    fetchArticleById(articleID).then( async (article) => {
+    if (article !== undefined) {
+
+       const comments = await fetchCommentsForArticle(articleID)
+       const comment_count = comments.length
+       article.comment_count = comment_count
+       res.status(200).send(article)
+
+    } else {
+    res.status(404).send({ status: 404,  msg: "Not found"})
+    }
+    }).catch((err) => {
+        next(err)
+    })
+}
