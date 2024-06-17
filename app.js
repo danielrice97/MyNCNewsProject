@@ -5,10 +5,12 @@ const {getAllEndPointsInfo}= require('./controllers/endpoints.controller.js')
 const {getArticleByID, getAllArticles, getCommentsForArticle, postCommentForArticle, patchArticle, getsArticleWithCommentCount}= require('./controllers/articles.controllers.js')
 const {deleteComment}= require('./controllers/comments.controller.js')
 const {getUsers} = require('./controllers/users.controller.js')
-app.use(express.json())
 const cors = require('cors');
 
 app.use(cors());
+
+app.use(express.json())
+
 
 app.get('/api/topics', getAllTopicsData)
 app.get('/api', getAllEndPointsInfo)
