@@ -6,6 +6,9 @@ const {getArticleByID, getAllArticles, getCommentsForArticle, postCommentForArti
 const {deleteComment}= require('./controllers/comments.controller.js')
 const {getUsers} = require('./controllers/users.controller.js')
 app.use(express.json())
+const cors = require('cors');
+
+app.use(cors());
 
 app.get('/api/topics', getAllTopicsData)
 app.get('/api', getAllEndPointsInfo)
