@@ -15,19 +15,24 @@ exports.getArticleByID= async (req,res,next)=>{
 const fetchAllArticles = require('../models/fetchAllArticles.model.js')
 
 exports.getAllArticles = (req, res, next) => {
-    const queryvalue = Object.values(req.query).toString()
-    
-    const query = Object.keys(req.query).toString()
-    
-    if (query === "topic"  || !query) {
+    const { topic, sort_by, order } = req.query;
 
-    fetchAllArticles(queryvalue).then((articles) => {
-        res.status(200).send(articles)
-    }).catch((err)=> {
-        next(err)
-    })
+    const validQueries = ['topic', 'sort_by', 'order'];
+    const queryKeys = Object.keys(req.query);
+
+    // Check if all provided query keys are valid
+    const isValidQuery = queryKeys.every(key => validQueries.includes(key));
+
+    if (isValidQuery) {
+        fetchAllArticles({ topic, sort_by, order })
+            .then((articles) => {
+                res.status(200).send({ articles });
+            })
+            .catch((err) => {
+                next(err);
+            });
     } else {
-        next({ status: 400, msg: "Bad Request"})
+        next({ status: 400, msg: "Bad Request" });
     }
 }
 
