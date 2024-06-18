@@ -23,7 +23,6 @@ app.delete('/api/comments/:comment_id', deleteComment)
 app.get('/api/users', getUsers)
 app.get('/api/articles/:article_id/comment_count', getsArticleWithCommentCount)
 
-
 app.use((err, req, res, next) => {
 
     if (err.msg && err.status) {
