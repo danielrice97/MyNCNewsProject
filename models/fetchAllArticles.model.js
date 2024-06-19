@@ -1,6 +1,6 @@
 const db = require('../db/connection.js');
 
-function fetchAllArticles({ topic, sort_by = 'created_at', order = 'DESC' }) {
+function fetchAllArticles({ topic, sort_by = 'created_at', order = 'ASC' }) {
     const validSortColumns = ['article_id', 'title', 'topic', 'author', 'created_at', 'votes', 'article_img_url', 'comment_count'];
     const validOrderDirections = ['ASC', 'DESC'];
 
