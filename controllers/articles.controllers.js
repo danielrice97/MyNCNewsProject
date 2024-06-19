@@ -27,12 +27,29 @@ exports.getAllArticles = async (req, res, next) => {
         try {
             let articles = await fetchAllArticles({ topic, sort_by, order });
             
-            // Fetch comments for each article to get the comment count
-            articles = await Promise.all(articles.map(async article => {
-                const comments = await fetchCommentsForArticle(article.id); // Assuming each article has an 'id' property
-                article.comment_count = comments.length;
-                return article;
-            }));
+            if (sort_by === 'comment_count') {
+                // Fetch comments for each article to get the comment count and then sort
+                articles = await Promise.all(articles.map(async article => {
+                    const comments = await fetchCommentsForArticle(article.article_id); 
+                    article.comment_count = comments.length;
+                    return article;
+                }));
+
+                articles.sort((a, b) => {
+                    if (order.toUpperCase() === 'ASC') {
+                        return a.comment_count - b.comment_count;
+                    } else {
+                        return b.comment_count - a.comment_count;
+                    }
+                });
+            } else {
+                // Fetch comments for each article to get the comment count
+                articles = await Promise.all(articles.map(async article => {
+                    const comments = await fetchCommentsForArticle(article.article_id); 
+                    article.comment_count = comments.length;
+                    return article;
+                }));
+            }
             
             res.status(200).send({ articles });
         } catch (err) {
@@ -42,6 +59,7 @@ exports.getAllArticles = async (req, res, next) => {
         next({ status: 400, msg: "Bad Request" });
     }
 };
+
 const fetchCommentsForArticle = require('../models/fetchCommentsForArticle.model.js')
 
 exports.getCommentsForArticle = async (req, res, next) => {

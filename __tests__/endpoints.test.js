@@ -315,7 +315,7 @@ describe('allows user to filter the articles by a topic query', () => {
                   title: 'UNCOVERED: catspiracy to bring down democracy',
                   topic: 'cats',
                   author: 'rogersop',
-                  comment_count:0,
+                  comment_count:2,
                   created_at: '2020-08-03T13:14:00.000Z',
                   votes: 0,
                   article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
