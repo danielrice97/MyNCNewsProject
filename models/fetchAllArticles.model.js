@@ -21,7 +21,7 @@ function fetchAllArticles({ topic, sort_by = 'created_at', order = 'DESC' }) {
             articles.created_at, 
             articles.votes, 
             articles.article_img_url,
-            COUNT(comments.comment_id) AS comment_count
+            COUNT(comments.article_id) AS comment_count
         FROM articles
         LEFT JOIN comments ON articles.article_id = comments.article_id
     `;
@@ -34,24 +34,14 @@ function fetchAllArticles({ topic, sort_by = 'created_at', order = 'DESC' }) {
 
     sql += ` GROUP BY articles.article_id`;
 
-    const subquery = `
-        SELECT
-            articles_with_comments.*,
-            COUNT(comments.comment_id) AS comment_count
-        FROM (${sql}) AS articles_with_comments
-        LEFT JOIN comments ON articles_with_comments.article_id = comments.article_id
-        GROUP BY articles_with_comments.article_id
-    `;
+    // Add sorting and ordering
+    if (sort_by !== 'comment_count') {
+        sql += ` ORDER BY articles.${sort_by} ${order.toUpperCase()}`;
+    } else {
+        sql += ` ORDER BY comment_count ${order.toUpperCase()}`;
+    }
 
-    const finalQuery = `
-        SELECT
-            sub.*,
-            comment_count
-        FROM (${subquery}) AS sub
-        ORDER BY ${sort_by === 'comment_count' ? 'comment_count' : `sub.${sort_by}`} ${order.toUpperCase()}
-    `;
-
-    return db.query(finalQuery, values).then(({ rows }) => {
+    return db.query(sql, values).then(({ rows }) => {
         if (rows.length !== 0) {
             return rows;
         } else {
