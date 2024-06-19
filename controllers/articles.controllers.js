@@ -14,28 +14,34 @@ exports.getArticleByID= async (req,res,next)=>{
 
 const fetchAllArticles = require('../models/fetchAllArticles.model.js')
 
-exports.getAllArticles = (req, res, next) => {
-    const { topic, sort_by, order } = req.query;
+exports.getAllArticles = async (req, res, next) => {
+    const { topic, sortby: sort_by, order } = req.query;
 
-    const validQueries = ['topic', 'sort_by', 'order'];
+    const validQueries = ['topic', 'sortby', 'order'];
     const queryKeys = Object.keys(req.query);
 
     // Check if all provided query keys are valid
     const isValidQuery = queryKeys.every(key => validQueries.includes(key));
 
     if (isValidQuery) {
-        fetchAllArticles({ topic, sort_by, order })
-            .then((articles) => {
-                res.status(200).send({ articles });
-            })
-            .catch((err) => {
-                next(err);
-            });
+        try {
+            let articles = await fetchAllArticles({ topic, sort_by, order });
+            
+            // Fetch comments for each article to get the comment count
+            articles = await Promise.all(articles.map(async article => {
+                const comments = await fetchCommentsForArticle(article.id); // Assuming each article has an 'id' property
+                article.comment_count = comments.length;
+                return article;
+            }));
+            
+            res.status(200).send({ articles });
+        } catch (err) {
+            next(err);
+        }
     } else {
         next({ status: 400, msg: "Bad Request" });
     }
-}
-
+};
 const fetchCommentsForArticle = require('../models/fetchCommentsForArticle.model.js')
 
 exports.getCommentsForArticle = async (req, res, next) => {

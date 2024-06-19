@@ -162,7 +162,7 @@ describe('Endpoint Tests', () => {
         .get('/api/articles')
         .expect(200)
         .then((data) => {
-            const articles = data.body
+            const articles = data.body.articles
 
             articles.forEach((article) => {
                 expect(article).toMatchObject({
@@ -309,12 +309,13 @@ describe('allows user to filter the articles by a topic query', () => {
         .get('/api/articles?topic=cats')
         .expect(200)
         .then(({body}) => {
-            expect(body).toEqual( [
+            expect(body.articles).toEqual( [
                 {
                   article_id: 5,
                   title: 'UNCOVERED: catspiracy to bring down democracy',
                   topic: 'cats',
                   author: 'rogersop',
+                  comment_count:0,
                   created_at: '2020-08-03T13:14:00.000Z',
                   votes: 0,
                   article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'

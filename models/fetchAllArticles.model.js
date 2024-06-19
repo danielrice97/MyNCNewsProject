@@ -1,8 +1,8 @@
 const db = require('../db/connection.js');
 
 function fetchAllArticles({ topic, sort_by = 'created_at', order = 'DESC' } = {}) {
-    let validSortColumns = ['article_id', 'title', 'topic', 'author', 'created_at', 'votes', 'article_img_url'];
-    let validOrderDirections = ['ASC', 'DESC'];
+    const validSortColumns = ['article_id', 'title', 'topic', 'author', 'created_at', 'votes', 'article_img_url'];
+    const validOrderDirections = ['ASC', 'DESC'];
 
     // Ensure the sort_by and order parameters are valid
     if (!validSortColumns.includes(sort_by)) {
@@ -34,5 +34,4 @@ function fetchAllArticles({ topic, sort_by = 'created_at', order = 'DESC' } = {}
         });
     }
 }
-
 module.exports = fetchAllArticles;
