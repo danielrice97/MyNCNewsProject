@@ -17,7 +17,7 @@ const fetchAllArticles = require('../models/fetchAllArticles.model.js')
 exports.getAllArticles = async (req, res, next) => {
     const { topic, sortby: sort_by, order } = req.query;
 
-    const validQueries = ['topic', 'sortby', 'order'];
+    const validQueries = ['topic', 'sort_by', 'order'];
     const queryKeys = Object.keys(req.query);
 
     // Check if all provided query keys are valid
