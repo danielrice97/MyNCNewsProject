@@ -34,3 +34,15 @@ exports.patchComment = async (req, res, next) => {
         res.status(201).send(updatedArticle)
     })
 }
+
+exports.getComment = async (req, res, next) => {
+    const {comment_id} = req.params
+    
+    const comment = await fetchComment(comment_id)
+
+    if (!comment) {
+        return next({ status: 404, msg: "Not found" });
+    }
+
+    res.status(201).send(comment)
+}

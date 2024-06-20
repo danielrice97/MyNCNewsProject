@@ -21,6 +21,8 @@ app.delete('/api/comments/:comment_id', deleteComment)
 app.get('/api/users', getUsers)
 app.get('/api/articles/:article_id/comment_count', getsArticleWithCommentCount)
 app.patch('/api/comments/:comment_id', patchComment)
+app.get('/api/comments/:comment_id', patchComment)
+
 
 app.use((err, req, res, next) => {
 
