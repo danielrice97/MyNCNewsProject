@@ -5,6 +5,19 @@ const seed = require('../db/seeds/seed.js')
 
 beforeEach(()=> seed(db))
 
+describe.only('Toepic Tests', () => {
+    test('Status 200: GETs all Topics',()=>{
+        return request(app)
+        .patch('/api/comments/2').send({inc_votes: 1})
+        .expect(201)
+        .then(({body })=>{
+            
+            console.log(body)
+        })
+    })
+})
+
+
 describe('Topic Tests', () => {
     test('Status 200: GETs all Topics',()=>{
         return request(app)

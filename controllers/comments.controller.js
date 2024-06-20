@@ -19,19 +19,17 @@ exports.deleteComment = (req,res,next)=>{
 
 exports.patchComment = async (req, res, next) => {
     const inc_votes = req.body.inc_votes
-    const {comment_id} = req.params
-    
+const {comment_id} = req.params
+
     const comment = await fetchComment(comment_id)
+    const commentvotes = comment[0].votes
+    const new_votes = commentvotes+ inc_votes
 
-    if (!comment) {
-        return next({ status: 404, msg: "Not found" });
-    }
-
-    const current_votes = comment.votes
-    const new_votes = current_votes + inc_votes
-
+   
     updateCommentVotes(new_votes, comment_id).then((updatedComment) => {
-        res.status(201).send(updatedArticle)
+        updatedComment.votes = new_votes
+        console.log(updatedComment)
+        res.status(201).send(updatedComment)
     })
 }
 
